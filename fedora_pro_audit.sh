@@ -14,7 +14,7 @@ DISK_THRESHOLD=80
 
 # Initialize environment
 setup_env(){
-    if ([[EUID -ne 0$]]); then
+    if ([[EUID -ne 0]]); then
         echo "Error: This script must be run as root." >&2
             exit 1
     fi
