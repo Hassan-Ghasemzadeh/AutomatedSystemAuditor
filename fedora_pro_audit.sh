@@ -53,7 +53,7 @@ audit_security(){
     fi
 }
 
-# 5. Monitor Resources
+# Monitor Resources
 check_resources() {
     log_message "INFO" "Checking disk usage..."
     df -h | grep '^/dev/' | while read -r line; do
@@ -65,3 +65,19 @@ check_resources() {
         fi
     done
 }
+
+
+# --- Main Execution ---
+main() {
+    setup_env
+    log_message "START" "Starting Fedora System Audit"
+    
+    check_updates
+    audit_security
+    check_resources
+    
+    log_message "END" "Audit completed successfully. Report: $LOG_FILE"
+}
+
+# Execute main function with arguments
+main "$@"
