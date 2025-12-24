@@ -39,3 +39,16 @@ check_updates(){
         log_message "Info" "System is up to date."
     fi
 }
+
+#  Audit SELinux & FireWall
+audit_security(){
+    log_message "Info" "Auditing system security..."
+    local selinux_status=$(getenforce)
+    log_message "INFO" "SELinux Status: $selinux_status"
+
+    if systemctl is-active --quiet firewalld; then
+        log_message "INFO" "Firewall is active."
+    else
+        log_message "CRITICAL" "Firewall is INACTIVE!"
+    fi
+}
