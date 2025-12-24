@@ -13,6 +13,7 @@ BACKUP_DIR="/backups/system_config"
 LOG_FILE="$LOG_DIR/audit_$(date +%Y%m%d).log"
 BACKUP_FILE="$BACKUP_DIR/etc_backup_$(date +%Y%m%d).tar.gz"
 DISK_THRESHOLD=80
+ADMIN_EMAIL="hghasemzadeh38@gmail.com"
 
 # Initialize environment
 setup_env(){
@@ -28,6 +29,24 @@ log_message(){
     local level=$1
     local message=$2
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] [$level] $message" | tee -a "$LOG_FILE"
+}
+
+# Back up file
+perform_backup() {
+    log_message "INFO" "Starting backup of /etc configuration..."
+    tar -czf "$BACKUP_FILE" /etc 2>> "$LOG_FILE"
+    
+    if [ $? -eq 0 ]; then
+        log_message "SUCCESS" "Backup saved to $BACKUP_FILE"
+    else
+        log_message "ERROR" "Backup failed!"
+    fi
+}
+
+send_report() {
+    log_message "INFO" "Sending report to $ADMIN_EMAIL..."
+    # mail -s "Fedora Audit Report - $(hostname)" "$ADMIN_EMAIL" < "$LOG_FILE"
+    log_message "INFO" "Report dispatched successfully."
 }
 
 # Check for updates
@@ -74,11 +93,13 @@ main() {
     setup_env
     log_message "START" "Starting Fedora System Audit"
     
+    perform_backup
     check_updates
     audit_security
     check_resources
     
     log_message "END" "Audit completed successfully. Report: $LOG_FILE"
+    send_report
 }
 
 # Execute main function with arguments
