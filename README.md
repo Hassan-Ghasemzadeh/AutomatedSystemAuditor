@@ -1,4 +1,4 @@
-# Fedora System Admin Master 🚀
+# Fedora Automated System Auditor(Bash) 🚀
 **A Modular Bash Framework for System Health, Security Auditing, and Automation.**
 
 ![Bash](https://img.shields.io/badge/Language-Bash-4EAA25.svg)
